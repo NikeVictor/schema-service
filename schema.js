@@ -1,6 +1,5 @@
-// schema.js
 const { GraphQLObjectType, GraphQLString, GraphQLSchema } = require('graphql');
-const { Post } = require('./models'); // Import your MongoDB models
+const { Post } = require('./models');
 
 const PostType = new GraphQLObjectType({
   name: 'Post',
@@ -17,8 +16,7 @@ const RootQuery = new GraphQLObjectType({
     post: {
       type: PostType,
       args: { id: { type: GraphQLString } },
-      resolve(parent, args) {
-        // Implement logic to fetch a post by ID from your MongoDB
+      resolve(args) {
         return Post.findById(args.id);
       },
     },
@@ -34,8 +32,7 @@ const Mutation = new GraphQLObjectType({
         title: { type: GraphQLString },
         content: { type: GraphQLString },
       },
-      resolve(parent, args) {
-        // Create a new post and save it to MongoDB
+      resolve(args) {
         const post = new Post({ title: args.title, content: args.content });
         return post.save();
       },
